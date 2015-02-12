@@ -1,3 +1,11 @@
-<h1>How Git Branches Work</h1>
+<p>Git branches are amazing tools that allow developers to test new features without wreaking havoc on code that already works.  When combined with GitHub, branches are especially useful to developers who need to merge their work with collaborators.   </p>
 
-<p>Body of post</p>
+<p>  As a new developer, I'm frequently in the mindset of following established rules and trusting that certain techniques and concepts just work.  I don't need to know every detail about how something works, but I do get a little freaked out when I have no idea how something is working. And until now, I had no idea how Git branches actually worked.</p>
+
+<h4>Git Init</h4>
+<p>Transforming a normal directory into a local git repository requires the utterance of two magic words:  git init.  This command installs hidden files into the directory you were in when you executed the command.  Let's try this first bit of vodoo magic out:</p>
+
+<script src="https://gist.github.com/EricFries/a6897adad817569ff9c7.js"></script>
+
+<p>Now that you've run git init, you are automatically in the "master" branch of your respository. You can verify this by entering the the using the git status command.</p>
+<script src="https://gist.github.com/EricFries/bc1c454a9074099f0f15.js"></script>
