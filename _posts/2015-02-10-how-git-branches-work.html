@@ -14,12 +14,14 @@ title: How Git Branches Work
 
 <script src="https://gist.github.com/EricFries/a6897adad817569ff9c7.js"></script>
 
-<p>Now that I've run git init, I'm automatically in the "master" branch of my local repository. I can verify this by using the "git status" command.</p>
+<p>Now that I've run "git init,"" I'm automatically in the "master" branch of my local repository. I can verify this by using the "git status" command.</p>
 <script src="https://gist.github.com/EricFries/bc1c454a9074099f0f15.js"></script>
 
 <p>I'd like to start writing a textfile in this directory that I'll later use as the body of a blog post.  So I start editing a new textfile called post.txt in my text editor. Here's how my file currently stands:</p>
 
 <script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
+
+<h4>Git Add and Commit</h4>
 
 <p>Importantly, I tell Git to "stage" this file by using the "git add ." command, and git takes a snapshot of the file's current state when I run the "git commit -m" command with a message about what I did to the file.</p>
 
@@ -56,7 +58,7 @@ title: How Git Branches Work
 
 <script src="https://gist.github.com/EricFries/cb0e0640bb06af9bb95e.js"></script>
 
-<p>And there's the longer version of my post.txt file.</p>
+<p>And there's the longer version of my post.txt file again.</p>
 
 <p>So how many versions of this post.txt file are there?  There is exactly one post.txt file.  But this is troubling because when I switch back and forth between branches I'm seeing different versions of post.txt.  </p>
 
