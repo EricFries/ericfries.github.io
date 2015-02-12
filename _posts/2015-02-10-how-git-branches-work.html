@@ -14,11 +14,25 @@ title: How Git Branches Work
 
 <script src="https://gist.github.com/EricFries/a6897adad817569ff9c7.js"></script>
 
-<p>Now that you've run git init, you are automatically in the "master" branch of your respository. You can verify this by entering the the using the git status command.</p>
+<p>Now that you've run git init, you are automatically in the "master" branch of your respository. You can verify this by using the git status command.</p>
 <script src="https://gist.github.com/EricFries/bc1c454a9074099f0f15.js"></script>
 
-<p>Let's say I'd like to start writing a textfile in this directory that I'll later use as the body of a blog post.  So I start editing a new html file in my text editor, a title to it, and save it pending my next great idea.  Here's how my file currently stands:</p>
+<p>Let's say I'd like to start writing a textfile in this directory that I'll later use as the body of a blog post.  So I start editing a new textfile in my text editor, a title to it, and save it pending my next great idea.  Here's how my file currently stands:</p>
 
 <script src="https://gist.github.com/EricFries/8e7d4ad8f3b113b63af9.js"></script>
 
-<p>Later I add a paragraph to my post:
+<p>Later I add a my byline and my thesis of existence to the post:</p>
+
+<script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
+
+<p>Importnatly, I tell git to track this file by using the "git add ." command and I take a snapshot of this file's current state by using the "git commit -m" command with a message about what I did with the file.</p>
+
+<script src="https://gist.github.com/EricFries/6760ec3058e074f7587f.js"></script>
+
+<h4>Creating a New Git Branch</h4>
+<p>Now I'm wavering.  I want to make changes to my post's text, but I don't want to lose any of my work in the event it's actually groundbreaking.  Enter git branches.  So I make a new git branch called "experimental-theories"and switch into that branch to flesh out some new ideas:</p>
+
+<script src="https://gist.github.com/EricFries/1441eede2f85dd0cde4a.js"></script>
+
+<p>When I open my original 
+
