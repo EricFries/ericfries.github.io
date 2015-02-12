@@ -10,22 +10,22 @@ title: How Git Branches Work
 <p>  As a new developer, I'm frequently in the mindset of following established rules and trusting that certain techniques and concepts just work.  I don't need to know every detail about how something works, but I do get a little freaked out when I have no idea how something is working. And until now, I had no idea how Git branches actually worked.</p>
 
 <h4>Git Init</h4>
-<p>Transforming a normal directory into a local git repository requires the utterance of two magic words:  git init.  This command installs hidden files into the directory you were in when you executed the command.  Let's try this first bit of vodoo magic out:</p>
+<p>Transforming a normal directory into a local git repository requires the utterance of two magic words:  "git init.""  This command installs hidden files into the directory you were in when you executed the command.  Let's try this first bit of vodoo magic out:</p>
 
 <script src="https://gist.github.com/EricFries/a6897adad817569ff9c7.js"></script>
 
-<p>Now that you've run git init, you are automatically in the "master" branch of your respository. You can verify this by using the git status command.</p>
+<p>Now that you've run git init, you are automatically in the "master" branch of your respository. You can verify this by using the "git status" command.</p>
 <script src="https://gist.github.com/EricFries/bc1c454a9074099f0f15.js"></script>
 
 <p>Let's say I'd like to start writing a textfile in this directory that I'll later use as the body of a blog post.  So I start editing a new textfile in my text editor, a title to it, and save it pending my next great idea.  Here's how my file currently stands:</p>
 
 <script src="https://gist.github.com/EricFries/8e7d4ad8f3b113b63af9.js"></script>
 
-<p>Later I add a my byline and my thesis of existence to the post:</p>
+<p>Later I add my byline and my thesis of existence to the post:</p>
 
 <script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
 
-<p>Importnatly, I tell git to track this file by using the "git add ." command and I take a snapshot of this file's current state by using the "git commit -m" command with a message about what I did with the file.</p>
+<p>Importantly, I tell git to track this file by using the "git add ." command and git takes a snapshot of this file's current state when I run the "git commit -m" command with a message about what I did to the file.</p>
 
 <script src="https://gist.github.com/EricFries/6760ec3058e074f7587f.js"></script>
 
@@ -34,5 +34,20 @@ title: How Git Branches Work
 
 <script src="https://gist.github.com/EricFries/1441eede2f85dd0cde4a.js"></script>
 
-<p>When I open my original 
+<p>Predicably, when I open the original textfile, it looks exactly as I left it:</p>
+
+<script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
+
+<p>Now I'm ready to expand on my post so I make a few changes to my textfile:</p>
+
+<script src="https://gist.github.com/EricFries/d13986cc667fcc209a05.js"></script>
+
+<p>And take another snapshot of this file's evolution at this moment in time with the "git commit" command:</p>
+
+<script src="https://gist.github.com/EricFries/d67aceea7e0d48e4ea9f.js"></script>
+
+<p>
+
+<p>This is where things get a little mind-bending.  You might be thinking that if you were to open your Finder, and open the directory that contains this textfile, that you might actually actually see two textfiles.  You may have even thought that git secretly created a "master" branch directory and an "experimental-theories" branch directory, and that each existed as a parallel universe with their own version of the textfile I've been modifying.  At least, that's what I thought, and this is completely wrong.</p>
+
 
