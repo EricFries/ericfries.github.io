@@ -10,7 +10,7 @@ title: How Git Branches Work
 <p>  As a new developer, I'm frequently in the mindset of following established rules and trusting that certain techniques and concepts just work.  I don't need to know every detail about how something works, but I do get a little freaked out when I have no idea how something is working. And until now, I had no idea how Git branches actually worked.</p>
 
 <h4>Git Init</h4>
-<p>Transforming a normal directory into a local git repository requires the utterance of two magic words:  "git init.""  This command installs hidden files into the directory you were in when you executed the command.  Let's try this first bit of vodoo magic out:</p>
+<p>Transforming a normal directory into a local git repository requires the utterance of two magic words:  "git init."  This command installs hidden files into the directory you were in when you executed the command.  Let's try this first bit of vodoo magic out:</p>
 
 <script src="https://gist.github.com/EricFries/a6897adad817569ff9c7.js"></script>
 
@@ -27,7 +27,7 @@ title: How Git Branches Work
 
 <p>Importantly, I tell git to track this file by using the "git add ." command and git takes a snapshot of this file's current state when I run the "git commit -m" command with a message about what I did to the file.</p>
 
-<script src="https://gist.github.com/EricFries/6760ec3058e074f7587f.js"></script>
+<script src="https://gist.github.com/EricFries/932cbd7cded3ac770cc1.js"></script>
 
 <h4>Creating a New Git Branch</h4>
 <p>Now I'm wavering.  I want to make changes to my post's text, but I don't want to lose any of my work in the event it's actually groundbreaking.  Enter git branches.  So I make a new git branch called "experimental-theories"and switch into that branch to flesh out some new ideas:</p>
@@ -46,8 +46,16 @@ title: How Git Branches Work
 
 <script src="https://gist.github.com/EricFries/d67aceea7e0d48e4ea9f.js"></script>
 
-<p>
+<p>At this point, I'd like to go back to my post as it stood in the master branch.  It's more concise, and less political.  So I simply switch back to my "master" branch:
 
-<p>This is where things get a little mind-bending.  You might be thinking that if you were to open your Finder, and open the directory that contains this textfile, that you might actually actually see two textfiles.  You may have even thought that git secretly created a "master" branch directory and an "experimental-theories" branch directory, and that each existed as a parallel universe with their own version of the textfile I've been modifying.  At least, that's what I thought, and this is completely wrong.</p>
+<script src="https://gist.github.com/EricFries/b65add278eb4cec808e0.js"></script>
+
+<p>And voila, when I open the text file, I have the original version back:</p>
+
+<script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
+
+<p>This is where things get a little mind-bending. How is git able to do this?  You might be thinking that if I opened my Finder, and opened the directory containing the textfile, that there might actually be two textfiles.  You may even be thinking that git secretly created a "master" branch directory and an "experimental-theories" branch directory, and that each exists as a parallel universe with their own version of the textfile I've been modifying.  At least, that's what I thought, and it's wrong.</p>
+
+<p>There is exactly one post.txt file in the directory I've saved it in.  But this is troubling becuase when I swtich back and forth between branches I'm seeing different verisons of post.txt.  This is the magic of git.  Remember those snapshots of post.txt I took using "git commit?"  Everytime I switch the branch I'm working in, git relies on these snapshots to modify the one, singular file to look exactly as it did according to the last snapshot taken in the branch I'm switching to.</p>
 
 
