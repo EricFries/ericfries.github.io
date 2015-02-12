@@ -58,7 +58,7 @@ title: How Git Branches Work
 
 <p>And there's the longer version of my post.txt file</p>
 
-<p>So how many versions of the post.txt file are there?  There is exactly one post.txt file.  But this is troubling becuase when I swtich back and forth between branches I'm seeing different versions of post.txt.  This is the magic of Git.  Remember those snapshots of post.txt I took using "git commit?"  Every time I switch the branch I'm working in, Git uses these snapshots to modify the one, singular file to look exactly as it did according to the last snapshot taken in the branch I'm switching to.  So the version of post.txt I see when I open it (whether via Finder or Terminal) is the version according to the snapshots in the branch I'm currently in.</p>
+<p>So how many versions of the post.txt file are there?  There is exactly one post.txt file.  But this is troubling because when I switch back and forth between branches I'm seeing different versions of post.txt.  This is the magic of Git.  Remember those snapshots of post.txt I took using "git commit?"  Every time I switch the branch I'm working in, Git uses these snapshots to modify the one, singular file to look exactly as it did according to the last snapshot taken in the branch I'm switching to.  So the version of post.txt I see when I open it (whether via Finder or Terminal) is the version according to the snapshots in the branch I'm currently in.</p>
 
 <p>Of course, a much more technical explanation of this phenomenon can be found in the <a href="http://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">official Git documentation</a> which confirms that switching branches modifies the working directory</p>
 
