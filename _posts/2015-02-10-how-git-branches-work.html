@@ -3,7 +3,7 @@ layout: post
 title: How Git Branches Work
 ---
 
-<iframe src="//giphy.com/embed/CrcFUKBF6Jf6U?html5=true" width="480" height="284" frameBorder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+<iframe src="//giphy.com/embed/CrcFUKBF6Jf6U?html5=true" width="480" height="284" frameBorder="0" align="right" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 
 <p>Git's branches are amazing tools that allow developers to test new features without wreaking havoc on code that already works.  When combined with GitHub, branches are especially useful to developers who need to merge their work with collaborators.   </p>
 
@@ -17,20 +17,20 @@ title: How Git Branches Work
 <p>Now that I've run git init, I'm automatically in the "master" branch of my local repository. I can verify this by using the "git status" command.</p>
 <script src="https://gist.github.com/EricFries/bc1c454a9074099f0f15.js"></script>
 
-<p>Let's say I'd like to start writing a textfile in this directory that I'll later use as the body of a blog post.  So I start editing a new textfile called post.txt in my text editor. Here's how my file currently stands:</p>
+<p>I'd like to start writing a textfile in this directory that I'll later use as the body of a blog post.  So I start editing a new textfile called post.txt in my text editor. Here's how my file currently stands:</p>
 
 <script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
 
-<p>Importantly, I tell git to "stage" this file by using the "git add ." command, and git takes a snapshot of the file's current state when I run the "git commit -m" command with a message about what I did to the file.</p>
+<p>Importantly, I tell Git to "stage" this file by using the "git add ." command, and git takes a snapshot of the file's current state when I run the "git commit -m" command with a message about what I did to the file.</p>
 
 <script src="https://gist.github.com/EricFries/932cbd7cded3ac770cc1.js"></script>
 
 <h4>Creating a New Git Branch</h4>
-<p>Now I'm wavering.  I want to make changes to my post's text, but I don't want to lose any of my previous work in the event it's actually groundbreaking.  Enter git branches.  So I make a new git branch called "experimental-theories" and switch into that branch to flesh out some new ideas:</p>
+<p>Now I'm wavering.  I want to make changes to my post's text, but I don't want to lose any of my previous work in the event it's actually groundbreaking.  Enter Git branches.  I'll make a new Git branch called "experimental-theories" and switch into that branch to flesh out some new ideas:</p>
 
 <script src="https://gist.github.com/EricFries/1441eede2f85dd0cde4a.js"></script>
 
-<p>Predicably, when I open the original textfile, it looks exactly as I left it:</p>
+<p>Predicably, when I open the original textfile again, it still looks exactly as I left it:</p>
 
 <script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
 
@@ -38,11 +38,11 @@ title: How Git Branches Work
 
 <script src="https://gist.github.com/EricFries/d13986cc667fcc209a05.js"></script>
 
-<p>And I simultaneously stage and take another snapshot of this file's evolution at this moment in time with the "git commit -am" command:</p>
+<p>And I simultaneously stage and take another snapshot of the file's evolution at this moment in time with the "git commit -am" command:</p>
 
 <script src="https://gist.github.com/EricFries/d67aceea7e0d48e4ea9f.js"></script>
 
-<p>At this point, I'd like to go back to my post as it stood in the master branch.  It's more concise, and less political.  So I simply switch back to my "master" branch:
+<p>However, at this point, I'd like to go back to my post as it stood in the master branch.  It's more concise, and less political.  So I simply switch back to my "master" branch:
 
 <script src="https://gist.github.com/EricFries/b65add278eb4cec808e0.js"></script>
 
@@ -50,16 +50,19 @@ title: How Git Branches Work
 
 <script src="https://gist.github.com/EricFries/ca7cf98267f759d41c5a.js"></script>
 
-<p>This is where things get a little mind-bending. How is git able to do this?  You might be thinking that if I opened my Finder, and opened the directory containing the textfile, that there might actually be two textfiles.  You may even be thinking that git secretly created a "master" branch directory and an "experimental-theories" branch directory, and that each exists as a parallel universe with their own version of the textfile I've been modifying.  At least, that's what I thought, and it's wrong.</p>
+<p>This is where things get a little mind-bending. How is Git able to do this?  You might be thinking that if I opened my Finder, and opened the directory containing the textfile, that there might actually be two textfiles.  You may even be thinking that Git secretly created a "master" branch directory and an "experimental-theories" branch directory, and that each exists as a parallel universe with their own version of the textfile I've been modifying.  At least, that's what I thought, and I was wrong.</p>
 
-<p>Just to refresh, let's switch over to my other branch and what the post.txt file looks like there:</p>
+<p>Just to refresh, let's switch over to my "experimental-theories" branch and see what the post.txt file looks like there:</p>
 
 <script src="https://gist.github.com/EricFries/cb0e0640bb06af9bb95e.js"></script>
 
-<p>And there's the longer version of my post.txt file</p>
+<p>And there's the longer version of my post.txt file.</p>
 
-<p>So how many versions of the post.txt file are there?  There is exactly one post.txt file.  But this is troubling because when I switch back and forth between branches I'm seeing different versions of post.txt.  This is the magic of Git.  Remember those snapshots of post.txt I took using "git commit?"  Every time I switch the branch I'm working in, Git uses these snapshots to modify the one, singular file to look exactly as it did according to the last snapshot taken in the branch I'm switching to.  So the version of post.txt I see when I open it (whether via Finder or Terminal) is the version according to the snapshots in the branch I'm currently in.</p>
+<p>So how many versions of this post.txt file are there?  There is exactly one post.txt file.  But this is troubling because when I switch back and forth between branches I'm seeing different versions of post.txt.  </p>
 
-<p>Of course, a much more technical explanation of this phenomenon can be found in the <a href="http://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">official Git documentation</a> which confirms that switching branches modifies the working directory</p>
+<p>
+This is the magic of Git.  Remember those snapshots of post.txt I took using "git commit?"  Every time I switch the branch I'm working in, Git uses these snapshots to modify the one, singular post.txt to look exactly as it did according to the last snapshot taken in the branch I'm switching to.  Whether I open post.txt via Finder or Terminal, the file will be modified according to the commit "snapshots" taken in the branch I'm currently in.</p>
+
+<p>Of course, a much more technical explanation of this phenomenon can be found in the <a href="http://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">official Git documentation</a> which confirms that switching branches actually modifies the working directory.</p>
 
 
