@@ -4,11 +4,11 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+ I'm a student in the <a href="http://flatironschool.com/web">Web Development Immersive </a>program at the <a href="http://flatironschool.com">Flatiron School.</a>
 
 ### More Information
 
-A place to include any other types of information that you'd like to include about yourself. 
+My dreams are object-oriented.
 
 ### Contact me
 
