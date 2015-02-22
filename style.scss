@@ -15,7 +15,8 @@
 
 html {
   font-size: 100%;
-
+   @include mobile {
+     max-width: 100%;
 }
 
 body {
@@ -140,11 +141,6 @@ iframe {
 	margin: 8px
 }
 
-@media screen and (max-device-width: 480px) {
-  iframe {
-    width: 100%;
-  }
-}
 
 // Nicolas Gallagher's micro clearfix hack
 // http://nicolasgallagher.com/micro-clearfix-hack/
