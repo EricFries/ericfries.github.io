@@ -24,7 +24,6 @@ body {
   font-family: 'Quattrocento', serif;
   color: $darkGray;
   width: 100%;
-  position: relative
 }
 
 .container {
@@ -294,6 +293,7 @@ nav {
     color: $gray;
     font-size: 22px;
     font-style: italic;
+    position: relative;
   }
 
   .comments {
