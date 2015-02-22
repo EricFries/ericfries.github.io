@@ -263,9 +263,12 @@ nav {
 
 #main {
 	margin: 8em
-	@include mobile {
-	margin: 20em
-	}
+}
+
+@media screen and (max-device-width: 480px) {
+  #main {
+    float: margin: 20em;
+  }
 }
 
 
