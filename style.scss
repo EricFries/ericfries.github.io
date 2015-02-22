@@ -262,12 +262,12 @@ nav {
 // Pushes main content below fixed masthead
 
 #main {
-	margin: 8em
+	margin: 8em;
 }
 
 @media screen and (max-device-width: 480px) {
   #main {
-    float: margin: 20em;
+    margin: 20em;
   }
 }
 
