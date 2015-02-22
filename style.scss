@@ -23,13 +23,11 @@ body {
   line-height: 1.4 ;
   font-family: 'Quattrocento', serif;
   color: $darkGray;
-  margin-left: auto;
-  margin-right: auto;
   width: 100%;
 }
 
 .container {
-  margin: 0 auto;
+  margin: 0 auto auto auto;
   max-width: 740px;
   padding: 0 10px;
   width: 100%;
