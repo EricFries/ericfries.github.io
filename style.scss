@@ -16,7 +16,7 @@
 html {
   font-size: 100%;
    @include mobile {
-     max-width: 100%;
+     max-width: 100%;}
 }
 
 body {
@@ -27,7 +27,7 @@ body {
   color: $darkGray;
   width: 100%;
     @include mobile {
-     max-width: 100%;
+     max-width: 100%;}
 }
 
 .container {
@@ -36,7 +36,7 @@ body {
   padding: 0 10px;
   width: 100%;
     @include mobile {
-     max-width: 100%;
+     max-width: 100%;}
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -177,7 +177,6 @@ iframe {
     @include mobile {
     position: fixed;
     top: 0px;
-    max-width: 100%;
   }
   
 }
@@ -277,7 +276,6 @@ nav {
 @media screen and (max-device-width: 480px) {
   #main {
     margin: 13em;
-    max-width: 100%;
   }
 }
 
