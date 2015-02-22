@@ -263,6 +263,9 @@ nav {
 
 #main {
 	margin: 8em
+	@include mobile {
+	margin: 20em
+	}
 }
 
 
