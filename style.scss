@@ -177,6 +177,7 @@ iframe {
     @include mobile {
     position: fixed;
     top: 0px;
+    max-width: 100%;
   }
   
 }
@@ -276,6 +277,7 @@ nav {
 @media screen and (max-device-width: 480px) {
   #main {
     margin: 13em;
+    max-width: 100%;
   }
 }
 
