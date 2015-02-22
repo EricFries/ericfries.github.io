@@ -263,7 +263,9 @@ nav {
 // Pushes main content below fixed masthead
 
 #main {
-	margin: 20%, auto, auto, auto;
+	margin-top: 8em;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 @media screen and (max-device-width: 480px) {
