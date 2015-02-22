@@ -133,6 +133,11 @@ img {
   background: $lightGray;
 }
 
+
+iframe {
+	margin: 8px
+}
+
 // Nicolas Gallagher's micro clearfix hack
 // http://nicolasgallagher.com/micro-clearfix-hack/
 .clearfix:before,
@@ -149,6 +154,7 @@ img {
 /* LAYOUT / SECTIONS */
 /*********************/
 
+
 //
 // .masthead
 //
@@ -156,14 +162,20 @@ img {
 .wrapper-masthead {
   margin-bottom: 50px;
     background: $black;
+    position: fixed;
+    width: 100%;
+    top: 0px;
 
-
+    @include mobile {
+    position: fixed;
+    top: 0px;
+  }
   
 }
 
 .masthead {
   padding: 20px 0;
-  // Removed border when color changed to blue
+  // Removed border when color changed to black
   // border-bottom: 1px solid $lightGray;
 
   @include mobile {
@@ -247,13 +259,17 @@ nav {
   }
 }
 
-//
-// .main
-//
+// Pushes main content below fixed masthead
+
+#main {
+	margin: 8em
+}
+
 
 .posts > .post {
   padding-bottom: 2em;
   border-bottom: 1px solid $lightGray;
+
 }
 
 .posts > .post:last-child {
