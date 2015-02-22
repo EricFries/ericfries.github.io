@@ -18,7 +18,7 @@ html {
 }
 
 body {
-	background: $white;
+  background: $white;
   font-size: 18px;
   line-height: 1.4 ;
   font-family: 'Quattrocento', serif;
@@ -31,6 +31,7 @@ body {
   max-width: 740px;
   padding: 0 10px;
   width: 100%;
+  position: relative
 }
 
 h1, h2, h3, h4, h5, h6 {
