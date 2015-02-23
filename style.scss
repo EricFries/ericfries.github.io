@@ -137,7 +137,7 @@ img {
 iframe {
 	margin: 8px
 	@include mobile {
-      max-width: 100%;
+      width: 100%;
     }
 }
 
