@@ -136,6 +136,9 @@ img {
 
 iframe {
 	margin: 8px
+	@include mobile {
+      max-width: 100%;
+    }
 }
 
 
@@ -270,13 +273,6 @@ div#main {
 	@include mobile {
       margin-top: 12em;
     }
-
-//@media screen and (max-device-width: 480px) {
- // #main {
- //   margin-top: 13em;
-//  }
-}
-
 
 .posts > .post {
   padding-bottom: 2em;
