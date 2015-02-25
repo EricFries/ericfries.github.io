@@ -1,0 +1,67 @@
+---
+layout: post
+title: Active Record Naming Conventions
+---
+<img src="../images/file-naming.gif">
+<p>Active Record is a really cool (and super powerful) architectural pattern used to streamline the integration of Ruby objects and database tables.  It allows a Ruby program to "persist" an object's attributes as rows of ordinary strings and numbers in a database table without having to write a single line of SQL.</p>
+
+<p>Instead of manually writing SQL to create and add columns to a table, an Active Record "migration" can be used to set up a table with columns that correspond to an object's attributes (or "instance variables").  In order for Active Record to work its magic (i.e., accurately map between models and tables), very specific naming conventions must be followed.</p>
+
+<p>The general rule (consistent with the Ruby ethos) is that code using Active Record should read well, and its naming conventions are largely faithful to that goal.  However, as a beginner, adhering to these naming conventions has been difficult for me.  The single letter "s" (or lack thereof) has caused more than one migration to fail for me, and that is very frustrating.</p>
+
+<p>Here are some of Active Record's requirements for properly creating migrations and models:</p>
+
+<ul>
+	<li><h2>Models</h2>
+		<ul><li>Model names must be <strong>singluar</strong>.  Here's a properly defined model:
+
+{% highlight ruby %}
+class Author < ActiveRecord::Base
+end
+{% endhighlight %}
+
+		So although a program will likely create more than one Author object, the class name must singular.
+		</li></ul>
+	</li>
+
+	<li><h2>Tables</h2>
+		<ul><li>Table names must be <strong>plural</strong>.  The migration creating a table that corresponds to the Author class would include the following code:
+
+{% highlight ruby %}
+class CreateAuthors
+  def change
+    create_table :authors do |t|
+      t.string :name
+    end
+  end
+end
+{% endhighlight %}
+The key here is that "authors" is plural, and the table is not referred to as "author" (despite the singluar class name).
+		</li></ul>
+	</li>
+
+
+	<li><h2>Foreign Keys</h2>
+		<ul><li>Foreign keys must be the <strong>singularized</strong> version of the table name they reference.  If I want to associate a "books" table with the "authors" table, this code in a migration would do the trick:
+{% highlight ruby %}
+def change
+  add column :authors, :book_id
+end
+{% endhighlight %}
+		</li></ul>
+	</li>
+
+	<li><h2>Migration Classes & File Names</h2>
+		<ul><li>Migration class names must be CamelCased.  GetIt?  <br>Also, the migration class name must correlate to its filename.  The migration class filename should be written as the class name separated by underscores (rather than CamcelCased) preceded by a timestamp.  For example:
+
+{% highlight ruby %}
+20150224120001_add_books_to_authors.rb
+
+class AddBooksToAuthors < ActiveRecord::Migration
+end
+{% endhighlight %}
+		</li></ul>
+		</li>
+</ul>
+
+<p>And that's a basic overview of Active Record Naming Conventions.  It's by no means the most advanced topic, but Active Record will break if these rules aren't followed.</p>
