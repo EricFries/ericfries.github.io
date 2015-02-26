@@ -28,7 +28,7 @@ end
 		<ul><li>Table names must be <strong>plural</strong>.  The migration creating a table that corresponds to the Author class would include the following code:
 
 {% highlight ruby %}
-class CreateAuthors
+class CreateAuthors < ActiveRecord::Migration
   def change
     create_table :authors do |t|
       t.string :name
