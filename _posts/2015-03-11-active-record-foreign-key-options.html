@@ -80,8 +80,8 @@ jeter.bats.build(:name => "Louisville Slugger")
 
 <p>And although jeter is an instance of the class Player, it's now possible to ask the bat who it belongs to not by referring to the bat's "player," but to its more syntactically accurate owner, "batter":</p>
 {% highlight ruby %}
-slugger = Bat.find_by(:name => "Louisville Slugger")
-slugger.batter
+bat = Bat.find_by(:name => "Louisville Slugger")
+bat.batter
 {% endhighlight %}
 
 {% highlight bash %}
