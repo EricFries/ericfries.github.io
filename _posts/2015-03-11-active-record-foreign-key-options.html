@@ -1,0 +1,93 @@
+---
+layout: post
+title: Specifying Foreign Keys in Active Record Associations
+---
+
+<img src="http://cdn0.vox-cdn.com/assets/5060468/Flip_play_medium.gif" align="right">
+<p>Class methods are used in Active Record to express relationships between multiple tables.  These methods are used to teach Ruby applications about the connections that exist in database schema.</p>
+
+
+
+<h2>Basic Class Methods: has_many & belongs_to</h2>
+
+<p>Here's a simple example of why these methods are needed:  <br><br>To express the relationship that baseball players play for a team and a team has may different players, the application's models would use the "has_many" and "belongs_to" class methods: </p>
+
+{% highlight ruby %}
+
+class Team < ActiveRecord::Base
+  has_many :players
+end
+
+class Player < ActiveRecord::Base
+  belongs_to :team
+end
+
+{% endhighlight %}
+
+<p>In this basic example, each row in the players table (an individual player) would have a corresponding foreign key named "team_id."  This foreign key must be setup in the CreatePlayers migration, but it does not need to be explicitly referred to in the model above.  Active Record is smart enough to know that if I say Player belongs_to :team, that there must be a foreign key named team_id in the players table.</p>
+
+<p>However, this seamless solution does not fit all types of realtionships thay may exist between tables and models.  For example, there are various types of players on baseball teams, including fielders and batters.  The same player might be a fielder in one inning and a batter in the next.  Given that an individual player can have multiple roles on a team, it doesn't make sense to create separate models for both fielders and batters. They're the same person after all.  Players also need different equipment depending on their current role.  For example, a batter needs a bat, but not a glove, and a fielder needs a glove, but not a bat.</p>
+
+<h2>Leveraging Foreign Key Options</h2>
+
+<p>A better way to express these more complex relationships is to use the "foreign key" option when calling Active Record Associations' class methods:  </p>
+
+{% highlight ruby %}
+class Team < ActiveRecord::Base
+  has_many :players
+end
+
+class Player < ActiveRecord::Base
+  belongs_to :team
+  has_many :gloves, :foreign_key => 'fielder_id'
+  has_many :bats, :foreign_key => 'batter_id'
+end
+
+class Bat < ActiveRecord::Base
+  belongs_to :batter, :class_name => "Player"
+end
+
+class Glove < ActiveRecord::Base
+  belongs_to :fielder, :class_name => "Player"
+end
+{% endhighlight %}
+
+<p>By modifying the foreign keys that the bats and gloves tables use to identify the player they belong to, the database and models reflect their real life relationships in more natural way.</p>
+
+<p> Here, a new player is created, and given a new bat:</p>
+{% highlight ruby %}
+jeter = Player.create(:name => "Derek Jeter")
+{% endhighlight %}
+
+{% highlight bash %}
+<Player id: 2, name: "Derek Jeter", team_id: nil, created_at: 
+"2015-03-12 00:24:12", updated_at: 
+"2015-03-12 00:24:12"> 
+ {% endhighlight %}
+
+{% highlight ruby %}
+jeter.bats.build(:name => "Louisville Slugger")
+{% endhighlight %}
+
+
+{% highlight bash %}
+#<Bat id: 1, batter_id: 2, created_at: 
+"2015-03-12 00:17:14", updated_at: 
+"2015-03-12 00:26:02", name: "Louisville Slugger">
+ {% endhighlight %}
+
+<p>If you look closely, you'll see that the batter_id (2) in the bat object corresponds to the primary key id (2) in the player object</p>
+
+<p>And although jeter is an instance of the class Player, it's now possible to ask the bat who it belongs to not by referring to the bat's "player," but to its more syntactically accurate owner, "batter":</p>
+{% highlight ruby %}
+slugger = Bat.find_by(:name => "Louisville Slugger")
+slugger.batter
+{% endhighlight %}
+
+{% highlight bash %}
+ #<Player id: 2, name: "Derek Jeter", team_id: nil,
+  created_at: "2015-03-12 00:24:12", updated_at: 
+  "2015-03-12 00:24:12"> 
+ {% endhighlight %}
+
+ <p>Pretty, pretty cool!</p>
