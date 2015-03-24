@@ -41,7 +41,7 @@ A great <a href="http://codahale.com/how-to-safely-store-a-password/">blog post 
 
 <h2>Implementing bcrypt In a Rails App</h2>
 
-The <copde>bcrypt </code>gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:</p>
+The <code>bcrypt</code> gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:</p>
 
 {% highlight ruby %}
 # Use ActiveModel has_secure_password
@@ -61,7 +61,7 @@ class AddPasswordDigestToUsers < ActiveRecord::Migration
 end
 {% endhighlight %}
 
-Note that I’ve also added a column for a user’s email so the login process will require an email and password. The User model itself also needs to be told that it is going to use bcrypt using the <code>has_secure_password</code> method:
+Note that I’ve also added a column for a user’s email so the login process will require an email and password. The User model itself also needs to be told that it is going to use <code>bcrypt</code> using the <code>has_secure_password</code> method:
 
 {% highlight ruby %}
 class User < ActiveRecord::Base
@@ -85,7 +85,7 @@ Now, a user’s password needs to be authenticated before a session is created a
     end
 {% endhighlight %}
 
-This logic finds a user in the database by its email address, and then attempts to authenticate the user’s password if the user exists actually exists.  The password provided by the user is then converted to a hash by bcrypt, and compared to the hash stored in the <code>password_digest</code> column of the Users table.  If the two match, the user is logged in by assigning the user’s id to the session.  If not, the user is show the new user page which displays a message that the login failed and directs the user to create an account. That’s it!
+This logic finds a user in the database by its email address, and then attempts to authenticate the user’s password if the user exists actually exists.  The password provided by the user is then converted to a hash by <code>bcrypt</code>, and compared to the hash stored in the <code>password_digest</code> column of the Users table.  If the two match, the user is logged in by assigning the user’s id to the session.  If not, the user is show the new user page which displays a message that the login failed and directs the user to create an account. That’s it!
 
 <h2>bcrypt’s Security & Compliance Value</h2>
 
