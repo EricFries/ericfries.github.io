@@ -23,9 +23,9 @@ The goods news is that the same Florida law defines “personal information” a
 
 <h2>Enter bcrypt</h2>
 
-The <code>bcrypt</code> gem can be used to create an app’s authentication process that never stores passwords in an app’s database.  Instead, only a hash representing the password is stored.  According to its documentation, here’s the general concept:   
+<p>The <code>bcrypt</code> gem can be used to create an app’s authentication process that never stores passwords in an app’s database.  Instead, only a hash representing the password is stored.  According to its documentation, here’s the general concept:</p>   
 
-> “Hash algorithms take a chunk of data (e.g., your user's password) and create a "digital fingerprint," or hash, of it. Because this process is not reversible, there's no way to go from the hash back to the password.”
+<blockquote>“Hash algorithms take a chunk of data (e.g., your user's password) and create a "digital fingerprint," or hash, of it. Because this process is not reversible, there's no way to go from the hash back to the password.”</blockquote>
 
 When bcrypt is properly implemented in a Rails app, user passwords processed through an algorithm to create a distinct hash that is stored in the database.  To strengthen the integrity of the encryption, a “salt” (or random piece of data) is added to the user’s password before it is converted to a hash.  This “salt” is also stored in the database along with the hash that bcyrpt outputs.  A password encrypted by bcrypt looks like this:
 
@@ -83,7 +83,7 @@ Now, a user’s password needs to be authenticated before a session is created a
 
 This logic finds a user in the database by its email address, and then attempts to authenticate the user’s password if the user exists actually exists.  The password provided by the user is then converted to a hash by bcrypt, and compared to the hash stored in the password_digest column of the Users table.  If the two match, the user is logged in by assigning the user’s id to the session.  If not, the user is show the new user page which displays a message that the login failed and directs the user to create an account. That’s it!
 
-##bcrypt’s Security & Compliance Value
+<h2>bcrypt’s Security & Compliance Value</h2>
 
 
 The value in bcrypt is twofold.  It provides obvious technical benefits that protect the security of an app and the integrity of users’ passwords.  It does this by ensuring that a user’s actual password is never stored in the app’s database.  Only the user’s unique hash (or “digital fingerprint”) is stored as a “password_digest.”  In order for the hacker to login as the user, they would need to reverse engineer the hash into a password to submit through the site’s form.
