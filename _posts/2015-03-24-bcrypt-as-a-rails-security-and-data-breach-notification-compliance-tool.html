@@ -17,7 +17,7 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 
 <p>California, Florida, and Alaska have some of the strictest data breach laws in one very important respect that distinguishes them from other states.  Each state’s data breach notification law is triggered by the breach of username and passwords (in Alaska for “financial accounts,” and in California and Florida for merely “online accounts”). Other states follow a very 20th century concept of personal information do not require notification of consumers if only usernames and passwords are stolen.  They typically require information like bank account numbers, social security numbers, last names and/or drivers’ license numbers.</p>
 
-<p>Let’s look at the Florida statute since it may very well be the strictest in the country today with respect to usernames and passwords. Florida requires notification to individuals when “[a] user name or e-mail address, in combination with a password or security question and answer that would permit access to an online account” is breach.  Florida Statutes § 501.171(2).</p>  
+<p>Let’s look at the Florida statute since it may very well be the strictest in the country today with respect to usernames and passwords. Florida requires notification to individuals when a <blockquote>"user name or e-mail address, in combination with a password or security question and answer that would permit access to an online account” is breached.  Florida Statutes § 501.171(2).</blockquote></p>  
 
 <p>Since “online account” is not expressly defined by the statute, it could be interpreted to include every type of online account from Bank of America to Seamless.  This means that protecting the privacy of usernames, email addresses, passwords and security questions and answers is extremely important.</p>
 
@@ -32,9 +32,11 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 <p>When bcrypt is properly implemented in a Rails app, user passwords processed through an algorithm to create a distinct hash that is stored in the database.  To strengthen the integrity of the encryption, a “salt” (or random piece of data) is added to the user’s password before it is converted to a hash.  This “salt” is also stored in the database along with the hash that bcyrpt outputs.  A password encrypted by bcrypt looks like this:</p>
 
 <code>“$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1KUOYTa”</code>
+<br>
+<code>bcrypt</code>is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  <code>bcrypt</code> uses a “work factor” to make creating the hash more expensive (i.e., slower).  
 
-<code>bcrypt</code>is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  <code>bcrypt</code> uses a “work factor” to make creating the hash more expensive (i.e., slower).  This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
-A great <a href="http://codahale.com/how-to-safely-store-a-password/">blog post by Coda Hale</a> stated that when compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds!
+<p>This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
+A great <a href="http://codahale.com/how-to-safely-store-a-password/">blog post by Coda Hale</a> stated that when compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds!</p>
 
 <h2>Implementing brypt in a rails app</h2>
 
@@ -58,7 +60,7 @@ class AddPasswordDigestToUsers < ActiveRecord::Migration
 end
 {% endhighlight %}
 
-<p>Note that I’ve also added a column for a user’s email so the login process will require an email and password. The User model itself also needs to be told that it is going to use bcrypt using the has_secure_password method:</p>
+Note that I’ve also added a column for a user’s email so the login process will require an email and password. The User model itself also needs to be told that it is going to use bcrypt using the <code>has_secure_password</code> method:
 
 {% highlight ruby %}
 class User < ActiveRecord::Base
@@ -68,7 +70,7 @@ class User < ActiveRecord::Base
 end
 {% endhighlight %}
 
-<p>Now, a user’s password needs to be authenticated before a session is created and the user is logged in.  The has_secure_password method provides a method called authenticate that can be called on an instance of user, and takes in the password submitted by the user as an argument (which is then checked against the stored hash).  This logic should be implemented in the app’s Sessions Controllor:</p>
+Now, a user’s password needs to be authenticated before a session is created and the user is logged in.  The <code>has_secure_password</code> method provides a method called authenticate that can be called on an instance of user, and takes in the password submitted by the user as an argument (which is then checked against the stored hash).  This logic should be implemented in the app’s Sessions Controllor:
 
 {% highlight ruby %}
   def create
@@ -82,7 +84,7 @@ end
     end
 {% endhighlight %}
 
-<p>This logic finds a user in the database by its email address, and then attempts to authenticate the user’s password if the user exists actually exists.  The password provided by the user is then converted to a hash by bcrypt, and compared to the hash stored in the password_digest column of the Users table.  If the two match, the user is logged in by assigning the user’s id to the session.  If not, the user is show the new user page which displays a message that the login failed and directs the user to create an account. That’s it!</p>
+This logic finds a user in the database by its email address, and then attempts to authenticate the user’s password if the user exists actually exists.  The password provided by the user is then converted to a hash by bcrypt, and compared to the hash stored in the <code>password_digest</code> column of the Users table.  If the two match, the user is logged in by assigning the user’s id to the session.  If not, the user is show the new user page which displays a message that the login failed and directs the user to create an account. That’s it!
 
 <h2>bcrypt’s Security & Compliance Value</h2>
 
