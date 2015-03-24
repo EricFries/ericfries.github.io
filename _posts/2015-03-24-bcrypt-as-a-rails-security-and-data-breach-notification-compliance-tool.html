@@ -17,7 +17,7 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 
 <p>California, Florida, and Alaska have some of the strictest data breach laws in one very important respect that distinguishes them from other states.  Each state’s data breach notification law is triggered by the breach of username and passwords (in Alaska for “financial accounts,” and in California and Florida for merely “online accounts”). Other states follow a very 20th century concept of personal information do not require notification of consumers if only usernames and passwords are stolen.  They typically require information like bank account numbers, social security numbers, last names and/or drivers’ license numbers.</p>
 
-<p>Let’s look at the Florida statute since it may very well be the strictest in the country today with respect to usernames and passwords. Florida requires notification to individuals when a <blockquote>"user name or e-mail address, in combination with a password or security question and answer that would permit access to an online account” is breached.  Florida Statutes § 501.171(2).</blockquote></p>  
+<p>Let’s look at the <a href="http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&Search_String=&URL=0500-0599/0501/Sections/0501.171.html">Florida statute </a>since it may very well be the strictest in the country today with respect to usernames and passwords. Florida requires notification to individuals when a <blockquote>"user name or e-mail address, in combination with a password or security question and answer that would permit access to an online account” is breached.  Florida Statutes § 501.171(2).</blockquote></p>  
 
 <p>Since “online account” is not expressly defined by the statute, it could be interpreted to include every type of online account from Bank of America to Seamless.  This means that protecting the privacy of usernames, email addresses, passwords and security questions and answers is extremely important.</p>
 
@@ -33,12 +33,13 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 
 <code>“$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1KUOYTa”</code>
 <br>
-<code>bcrypt</code>is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  <code>bcrypt</code> uses a “work factor” to make creating the hash more expensive (i.e., slower).  
+<br>
+<code>bcrypt</code> &nbsp is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  <code>bcrypt</code> uses a “work factor” to make creating the hash more expensive (i.e., slower).  
 
 <p>This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
 A great <a href="http://codahale.com/how-to-safely-store-a-password/">blog post by Coda Hale</a> stated that when compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds!</p>
 
-<h2>Implementing brypt in a rails app</h2>
+<h2>Implementing bcrypt In a Rails App</h2>
 
 The <copde>bcrypt </code>gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:</p>
 
