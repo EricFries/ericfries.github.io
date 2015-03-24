@@ -17,7 +17,9 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 
 <p>California, Florida, and Alaska have some of the strictest data breach laws in one very important respect that distinguishes them from other states.  Each state’s data breach notification law is triggered by the breach of username and passwords (in Alaska for “financial accounts,” and in California and Florida for merely “online accounts”). Other states follow a very 20th century concept of personal information do not require notification of consumers if only usernames and passwords are stolen.  They typically require information like bank account numbers, social security numbers, last names and/or drivers’ license numbers.</p>
 
-<p>Let’s look at the Florida statute since it may very well be the strictest in the country today with respect to usernames and passwords. Florida requires notification to individuals when “[a] user name or e-mail address, in combination with a password or security question and answer that would permit access to an online account” is breach.  Florida Statutes § 501.171(2).  Since “online account” is not expressly defined by the statute, it could be interpreted to include every type of online account from Bank of America to Seamless.  This means that protecting the privacy of usernames, email addresses, passwords and security questions and answers is extremely important.</p>
+<p>Let’s look at the Florida statute since it may very well be the strictest in the country today with respect to usernames and passwords. Florida requires notification to individuals when “[a] user name or e-mail address, in combination with a password or security question and answer that would permit access to an online account” is breach.  Florida Statutes § 501.171(2).</p>  
+
+<p>Since “online account” is not expressly defined by the statute, it could be interpreted to include every type of online account from Bank of America to Seamless.  This means that protecting the privacy of usernames, email addresses, passwords and security questions and answers is extremely important.</p>
 
 <p>The goods news is that the same Florida law defines “personal information” as not including encrypted data (including in Florida).  See, Florida Statutes § 501.171(2).  This means that if hackers steal encrypted data, notification to consumers may not be required.</p>
 
@@ -31,20 +33,20 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 
 <code>“$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1KUOYTa”</code>
 
-<p><code>bcrypt</code> is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  bcrypt uses a “work factor” to make creating the hash more expensive (i.e., slower).  This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
-Compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds.</p>
+<code>bcrypt</code>is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  <code>bcrypt</code> uses a “work factor” to make creating the hash more expensive (i.e., slower).  This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
+Compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds.
 
 <h2>Implementing brypt in a rails app</h2>
 
 
-<p>The bcrypt gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:</p>
+The <copde>bcrypt </code>gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:</p>
 
 {% highlight ruby %}
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7’
 {% endhighlight %}
 
-<p>In order to function, bcrypt requires the model using authentication to have an attribute called “password_digest.”  The next step is to create a migration (here I’m adding it to a Users table) to add a password_digest column to the database (this is where the unique hash will be stored):</p>
+In order to function, <code>bcrypt</code> requires the model using authentication to have an attribute called “password_digest.”  The next step is to create a migration (here I’m adding it to a Users table) to add a password_digest column to the database (this is where the unique hash will be stored):
 
 {% highlight ruby %}
 class AddPasswordDigestToUsers < ActiveRecord::Migration
@@ -85,7 +87,7 @@ end
 
 <h2>bcrypt’s Security & Compliance Value</h2>
 
-<p>The value in bcrypt is twofold.  It provides obvious technical benefits that protect the security of an app and the integrity of users’ passwords.  It does this by ensuring that a user’s actual password is never stored in the app’s database.  Only the user’s unique hash (or “digital fingerprint”) is stored as a “password_digest.”  In order for the hacker to login as the user, they would need to reverse engineer the hash into a password to submit through the site’s form.</p>
+The value in <code>bcrypt</code> is twofold.  It provides obvious technical benefits that protect the security of an app and the integrity of users’ passwords.  It does this by ensuring that a user’s actual password is never stored in the app’s database.  Only the user’s unique hash (or “digital fingerprint”) is stored as a “password_digest.”  In order for the hacker to login as the user, they would need to reverse engineer the hash into a password to submit through the site’s form.
 
 <p>The legal benefit is that if an app’s security is breached, a hacker will never obtain an actual password, only a hash.  This means that under Florida’s law, for example, consumers would not need to be notified of the breach.  Of course, it may still be a good business practice to make this notification, but the law would not require it.</p>
 
