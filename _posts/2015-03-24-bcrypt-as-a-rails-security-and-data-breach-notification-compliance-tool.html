@@ -9,7 +9,7 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 
 <h2>Current Data Breach Laws</h2>
 
-<p>Data security is currently a major issue with political, economic and consumer privacy implications.  President Obama recently proposed a national data breach notification law to standardize what is currently a patchwork of 50 different state laws.  Having 50 different approaches to an issue that pervasively affects interstate commerce is a bad policy.</p>
+<p>Data security is currently a major issue with political, economic and consumer privacy implications.  President Obama <a href="http://www.computerworld.com/article/2867839/obama-calls-for-data-breach-notification-law-privacy-bill-of-rights.html">recently proposed </a> national data breach notification law to standardize what is currently a patchwork of 50 different state laws.  Having 50 different approaches to an issue that pervasively affects interstate commerce is a bad policy.</p>
 
 <p>For example, if a financial services company located in New York suffers a data breach, they are responsible for complying with not just New York law, but the laws of each state where a customer lives whose data was breached.  This means complying with different timeframes to notify customers of the data breach, and potentially notifying a variety of different entities like a state’s Attorney General (Vermont) or the Division of State Police (New Jersey).  As a result, many companies take the position of complying with the most stringent state’s laws and hope that compliance with that state’s law is sufficient in other states.</p>
 
@@ -25,7 +25,7 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 
 <h2>Enter bcrypt</h2>
 
-<p>The <code>bcrypt</code> gem can be used to create an app’s authentication process that never stores passwords in an app’s database.  Instead, only a hash representing the password is stored.  According to its documentation, here’s the general concept:</p>   
+<p>The <code>bcrypt</code> ruby gem can be used to create an app’s authentication process that never stores passwords in an app’s database.  Instead, only a hash representing the password is stored.  According to its <a href="https://github.com/codahale/bcrypt-ruby">official documentation</a>, here’s the general concept:</p>   
 
 <blockquote>“Hash algorithms take a chunk of data (e.g., your user's password) and create a "digital fingerprint," or hash, of it. Because this process is not reversible, there's no way to go from the hash back to the password.”</blockquote>
 
@@ -34,10 +34,9 @@ title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
 <code>“$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1KUOYTa”</code>
 
 <code>bcrypt</code>is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  <code>bcrypt</code> uses a “work factor” to make creating the hash more expensive (i.e., slower).  This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
-Compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds.
+A great <a href="http://codahale.com/how-to-safely-store-a-password/">blog post by Coda Hale</a> stated that when compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds!
 
 <h2>Implementing brypt in a rails app</h2>
-
 
 The <copde>bcrypt </code>gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:</p>
 
@@ -46,7 +45,7 @@ The <copde>bcrypt </code>gem is included by default in Rails 4.  Step one is to 
 gem 'bcrypt', '~> 3.1.7’
 {% endhighlight %}
 
-In order to function, <code>bcrypt</code> requires the model using authentication to have an attribute called “password_digest.”  The next step is to create a migration (here I’m adding it to a Users table) to add a password_digest column to the database (this is where the unique hash will be stored):
+In order to function, <code>bcrypt</code> requires the model using authentication to have an attribute called <code>password_digest.</code>  The next step is to create a migration (here I’m adding it to a Users table) to add a <code>password_digest</code> column to the database (this is where the unique hash will be stored):
 
 {% highlight ruby %}
 class AddPasswordDigestToUsers < ActiveRecord::Migration
@@ -87,7 +86,7 @@ end
 
 <h2>bcrypt’s Security & Compliance Value</h2>
 
-The value in <code>bcrypt</code> is twofold.  It provides obvious technical benefits that protect the security of an app and the integrity of users’ passwords.  It does this by ensuring that a user’s actual password is never stored in the app’s database.  Only the user’s unique hash (or “digital fingerprint”) is stored as a “password_digest.”  In order for the hacker to login as the user, they would need to reverse engineer the hash into a password to submit through the site’s form.
+The value in <code>bcrypt</code> is twofold.  It provides obvious technical benefits that protect the security of an app and the integrity of users’ passwords.  It does this by ensuring that a user’s actual password is never stored in the app’s database.  Only the user’s unique hash (or “digital fingerprint”) is stored as a <code>password_digest</code>.  In order for the hacker to login as the user, they would need to reverse engineer the hash into a password to submit through the site’s form.
 
 <p>The legal benefit is that if an app’s security is breached, a hacker will never obtain an actual password, only a hash.  This means that under Florida’s law, for example, consumers would not need to be notified of the breach.  Of course, it may still be a good business practice to make this notification, but the law would not require it.</p>
 
