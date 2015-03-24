@@ -7,13 +7,13 @@ Rails developers have the power to easily collect and access a tremendous amount
 
 Better yet, it can save a tremendous amount of time and resources if web apps are built to minimize the amount and type of data collected whose breach is certain to trigger a variety of expensive legal obligations.  This means not collecting certain “personal information” and leveraging encryption to protect the information that is collected.
 
-##Current Data Breach Laws
+<h2>Current Data Breach Laws</h2>
 
 Data security is currently a major issue with political, economic and consumer privacy implications.  President Obama recently proposed a national data breach notification law to standardize what is currently a patchwork of 50 different state laws.  Having 50 different approaches to an issue that pervasively affects interstate commerce is a bad policy.  
 
 For example, if a financial services company located in New York suffers a data breach, they are responsible for complying with not just New York law, but the laws of each state where a customer lives whose data was breached.  This means complying with different timeframes to notify customers of the data breach, and potentially notifying a variety of different entities like a state’s Attorney General (Vermont) or the Division of State Police (New Jersey).  As a result, many companies take the position of complying with the most stringent state’s laws and hope that compliance with that state’s law is sufficient in other states.
 
-##Breach of Usernames & Passwords
+<h2>Breach of Usernames & Passwords</h2>
 
 California, Florida, and Alaska have some of the strictest data breach laws in one very important respect that distinguishes them from other states.  Each state’s data breach notification law is triggered by the breach of username and passwords (in Alaska for “financial accounts,” and in California and Florida for merely “online accounts”). Other states follow a very 20th century concept of personal information do not require notification of consumers if only usernames and passwords are stolen.  They typically require information like bank account numbers, social security numbers, last names and/or drivers’ license numbers.
 
@@ -21,9 +21,9 @@ Let’s look at the Florida statute since it may very well be the strictest in t
 
 The goods news is that the same Florida law defines “personal information” as not including encrypted data (including in Florida).  See, Florida Statutes § 501.171(2).  This means that if hackers steal encrypted data, notification to consumers may not be required.
 
-##Enter bcrypt
+<h2>Enter bcrypt</h2>
 
-The `bcrypt` gem can be used to create an app’s authentication process that never stores passwords in an app’s database.  Instead, only a hash representing the password is stored.  According to its documentation, here’s the general concept:   
+The <code>bcrypt</code> gem can be used to create an app’s authentication process that never stores passwords in an app’s database.  Instead, only a hash representing the password is stored.  According to its documentation, here’s the general concept:   
 
 > “Hash algorithms take a chunk of data (e.g., your user's password) and create a "digital fingerprint," or hash, of it. Because this process is not reversible, there's no way to go from the hash back to the password.”
 
@@ -34,15 +34,19 @@ When bcrypt is properly implemented in a Rails app, user passwords processed thr
 bcrypt is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  bcrypt uses a “work factor” to make creating the hash more expensive (i.e., slower).  This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
 Compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds.
 
-##Implementing brypt in a rails app
+<h2>Implementing brypt in a rails app</h2>
+
 
 The bcrypt gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:
 
+{% highlight ruby %}
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7’
+{% endhighlight %}
 
 In order to function, bcrypt requires the model using authentication to have an attribute called “password_digest.”  The next step is to create a migration (here I’m adding it to a Users table) to add a password_digest column to the database (this is where the unique hash will be stored):
 
+{% highlight ruby %}
 class AddPasswordDigestToUsers < ActiveRecord::Migration
 
   def change
@@ -51,17 +55,21 @@ class AddPasswordDigestToUsers < ActiveRecord::Migration
   end
 
 end
+{% endhighlight %}
 
 Note that I’ve also added a column for a user’s email so the login process will require an email and password. The User model itself also needs to be told that it is going to use bcrypt using the has_secure_password method:
 
+{% highlight ruby %}
 class User < ActiveRecord::Base
 
   has_secure_password
 
 end
+{% endhighlight %}
 
 Now, a user’s password needs to be authenticated before a session is created and the user is logged in.  The has_secure_password method provides a method called authenticate that can be called on an instance of user, and takes in the password submitted by the user as an argument (which is then checked against the stored hash).  This logic should be implemented in the app’s Sessions Controllor:
 
+{% highlight ruby %}
   def create
     @user = User.find_by(:email => params[:email])
     if @user && @user.authenticate(params[:password])
@@ -71,6 +79,7 @@ Now, a user’s password needs to be authenticated before a session is created a
       flash.now[:notice] = "Failed to login.  Please create an account.”
       render :new
     end
+{% endhighlight %}
 
 This logic finds a user in the database by its email address, and then attempts to authenticate the user’s password if the user exists actually exists.  The password provided by the user is then converted to a hash by bcrypt, and compared to the hash stored in the password_digest column of the Users table.  If the two match, the user is logged in by assigning the user’s id to the session.  If not, the user is show the new user page which displays a message that the login failed and directs the user to create an account. That’s it!
 
