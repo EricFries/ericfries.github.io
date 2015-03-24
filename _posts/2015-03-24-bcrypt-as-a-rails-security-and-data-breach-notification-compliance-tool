@@ -1,0 +1,85 @@
+---
+layout: post
+title: bcrypt As a Rails Security & Data Breach Notification Compiance Tool
+---
+
+Rails developers have the power to easily collect and access a tremendous amount of data from the users that visit the sites powered by their code.  But as data breaches become more common, it’s crucially important that developers and the businesses they work for understand how to comply with data breach notification laws in the event of an attack that exposes users’ personal information.  
+
+Better yet, it can save a tremendous amount of time and resources if web apps are built to minimize the amount and type of data collected whose breach is certain to trigger a variety of expensive legal obligations.  This means not collecting certain “personal information” and leveraging encryption to protect the information that is collected.
+
+##Current Data Breach Laws
+
+Data security is currently a major issue with political, economic and consumer privacy implications.  President Obama recently proposed a national data breach notification law to standardize what is currently a patchwork of 50 different state laws.  Having 50 different approaches to an issue that pervasively affects interstate commerce is a bad policy.  
+
+For example, if a financial services company located in New York suffers a data breach, they are responsible for complying with not just New York law, but the laws of each state where a customer lives whose data was breached.  This means complying with different timeframes to notify customers of the data breach, and potentially notifying a variety of different entities like a state’s Attorney General (Vermont) or the Division of State Police (New Jersey).  As a result, many companies take the position of complying with the most stringent state’s laws and hope that compliance with that state’s law is sufficient in other states.
+
+##Breach of Usernames & Passwords
+
+California, Florida, and Alaska have some of the strictest data breach laws in one very important respect that distinguishes them from other states.  Each state’s data breach notification law is triggered by the breach of username and passwords (in Alaska for “financial accounts,” and in California and Florida for merely “online accounts”). Other states follow a very 20th century concept of personal information do not require notification of consumers if only usernames and passwords are stolen.  They typically require information like bank account numbers, social security numbers, last names and/or drivers’ license numbers.
+
+Let’s look at the Florida statute since it may very well be the strictest in the country today with respect to usernames and passwords. Florida requires notification to individuals when “[a] user name or e-mail address, in combination with a password or security question and answer that would permit access to an online account” is breach.  Florida Statutes § 501.171(2).  Since “online account” is not expressly defined by the statute, it could be interpreted to include every type of online account from Bank of America to Seamless.  This means that protecting the privacy of usernames, email addresses, passwords and security questions and answers is extremely important.
+
+The goods news is that the same Florida law defines “personal information” as not including encrypted data (including in Florida).  See, Florida Statutes § 501.171(2).  This means that if hackers steal encrypted data, notification to consumers may not be required.
+
+##Enter bcrypt
+
+The `bcrypt` gem can be used to create an app’s authentication process that never stores passwords in an app’s database.  Instead, only a hash representing the password is stored.  According to its documentation, here’s the general concept:   
+
+> “Hash algorithms take a chunk of data (e.g., your user's password) and create a "digital fingerprint," or hash, of it. Because this process is not reversible, there's no way to go from the hash back to the password.”
+
+When bcrypt is properly implemented in a Rails app, user passwords processed through an algorithm to create a distinct hash that is stored in the database.  To strengthen the integrity of the encryption, a “salt” (or random piece of data) is added to the user’s password before it is converted to a hash.  This “salt” is also stored in the database along with the hash that bcyrpt outputs.  A password encrypted by bcrypt looks like this:
+
+“$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1KUOYTa”
+
+bcrypt is also strengthened by it’s intentionally *slow* performance.  Yes, in the realm of password encryption, that’s actually a good thing.  bcrypt uses a “work factor” to make creating the hash more expensive (i.e., slower).  This means that if a hacker is randomly guessing passwords, it requires a tremendous amount of time (or computational power) to generate passwords from hashes.  bcyrpt’s “work factor” is customizable so as processing power increases due to Moore’s Law, the “work factor” can be adjusted in the future to make computation even slower.
+Compared to MD5, a password encrypted with bcyrpt using a work factor of 12 would take 12 years to crack instead of just 40 seconds.
+
+##Implementing brypt in a rails app
+
+The bcrypt gem is included by default in Rails 4.  Step one is to uncomment the reference to crypt in the app’s gemfile:
+
+{% highlight ruby %}
+# Use ActiveModel has_secure_password
+gem 'bcrypt', '~> 3.1.7’
+{% endhighlight %}
+
+In order to function, bcrypt requires the model using authentication to have an attribute called “password_digest.”  The next step is to create a migration (here I’m adding it to a Users table) to add a password_digest column to the database (this is where the unique hash will be stored):
+
+class AddPasswordDigestToUsers < ActiveRecord::Migration
+
+  def change
+    add_column :users, :password_digest, :string
+    add_column :users, :email, :string
+  end
+
+end
+
+Note that I’ve also added a column for a user’s email so the login process will require an email and password. The User model itself also needs to be told that it is going to use bcrypt using the has_secure_password method:
+
+class User < ActiveRecord::Base
+
+  has_secure_password
+
+end
+
+Now, a user’s password needs to be authenticated before a session is created and the user is logged in.  The has_secure_password method provides a method called authenticate that can be called on an instance of user, and takes in the password submitted by the user as an argument (which is then checked against the stored hash).  This logic should be implemented in the app’s Sessions Controllor:
+
+  def create
+    @user = User.find_by(:email => params[:email])
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      redirect_to root_path
+    else
+      flash.now[:notice] = "Failed to login.  Please create an account.”
+      render :new
+    end
+
+This logic finds a user in the database by its email address, and then attempts to authenticate the user’s password if the user exists actually exists.  The password provided by the user is then converted to a hash by bcrypt, and compared to the hash stored in the password_digest column of the Users table.  If the two match, the user is logged in by assigning the user’s id to the session.  If not, the user is show the new user page which displays a message that the login failed and directs the user to create an account. That’s it!
+
+##bcrypt’s Security & Compliance Value
+
+
+The value in bcrypt is twofold.  It provides obvious technical benefits that protect the security of an app and the integrity of users’ passwords.  It does this by ensuring that a user’s actual password is never stored in the app’s database.  Only the user’s unique hash (or “digital fingerprint”) is stored as a “password_digest.”  In order for the hacker to login as the user, they would need to reverse engineer the hash into a password to submit through the site’s form.
+
+The legal benefit is that if an app’s security is breached, a hacker will never obtain an actual password, only a hash.  This means that under Florida’s law, for example, consumers would not need to be notified of the breach.  Of course, it may still be a good business practice to make this notification, but the law would not require it.
+
