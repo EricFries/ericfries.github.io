@@ -1,0 +1,47 @@
+---
+layout: post
+title: Uploading Audio Files Using Form Data & Ajax
+---
+
+<p>When we set out to build Feedback, a collaborative music recording app that works entirely in the browser, a key priority for our team was to record, upload and display recorded tracks without causing the browser to refresh. We knew that this would involve making an Ajax call, but none of us had sent anything other than regular old strings of text through forms. Fortunately, we discovered that the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Using_FormData_Objects">FormData object </a>can be sent through forms to upload files and not just text.  Awesome!  Here's how accomplished uploading in Feedback:</p>
+
+{% highlight javascript %}
+      var fd = new FormData();
+      fd.append('data', audio);
+      fd.append('project_id', gon.project_id);
+{% endhighlight %}    
+
+<p>First, we create a new instance of the FormData object and assign it to the variable fd.  Then we attach the data we want to send to the FormData object using the append method and pass in a key value pair.  Using a key called "data" seems logical to describe the value "audio" (which represents an actual WAV file audio track).  Finally, we add another key value pair ('project_id', gon.project_id) that describes which audio project this particlar track belongs to.  This way our controller will know how to associate this track when the form hits the create action.</p>
+
+<p>Now that we have our FormData set up, it's time to actually send it to our backend using AJAX. Here's how we accomplished that:</p>
+
+{% highlight javascript %}
+      $.ajax({
+          type: 'POST',
+          url: '/tracks',
+          data: fd,
+          processData: false,
+          contentType: false,
+          dataType: "script"
+      });
+{% endhighlight %}   
+<p>Most of these options will seem familiar if you've done basic Ajax calls.  The two options processData and contentType might be new, however.  Setting processData to false just prevents the data from being converted to a query string (the default behavior).  Setting contentType to false simply tells jQuery not to set a content header.</p>
+
+<p>Finally, setting data to "fd" submits our FormData object in the Ajax call, and the dataType "script" options tells the Rails backend a response in JavaScript is expected.  Here's what params looks like when we insert a binding in the create action of the Tracks controller:</p>
+
+{% highlight bash %}
+[1] pry(#<TracksController>)> params
+=> {"data"=>
+  #<ActionDispatch::Http::UploadedFile:0x007fd4f6fb1f80
+   @content_type="audio/wav",
+   @headers=
+    "Content-Disposition: form-data; name=\"data\"; filename=\"blob\"\r\nContent-Type: audio/wav\r\n",
+   @original_filename="blob",
+   @tempfile=
+    #<File:/var/folders/js/2_9gdfv926vgwqdbmrq0y8w00000gn/T/RackMultipart20150419-56357-xov1eg>>,
+ "project_id"=>"17",
+ "controller"=>"tracks",
+ "action"=>"create"}
+ {% endhighlight %}
+
+ <p>Success!  Rails knows about the audio recorded in the browser.  From here all we need to do is persist the data, and respond with JavaScript telling the browser to append the new audio file to an existing html div. I'll save that for Part 2...</p> 
