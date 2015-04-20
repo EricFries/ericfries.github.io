@@ -1,9 +1,13 @@
 ---
 layout: post
-title: Uploading Audio Files Using Form Data & Ajax
+title: Uploading Audio Files Using FormData & Ajax
 ---
-<img src="images/feedback.png">
-<p>When we set out to build <a href="https://feedbackmusicapp.com">Feedback</a>, a collaborative music recording app that works entirely in the browser, a key priority for our team was to record, upload and display recorded tracks without causing the browser to refresh. We knew that this would involve making an Ajax call, but none of us had sent anything other than regular old strings of text through forms. Fortunately, we discovered that the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Using_FormData_Objects">FormData object </a>can be sent through forms to upload files and not just text.  Awesome!  Here's how accomplished uploading in Feedback:</p>
+
+<img src="http://ericfries.github.io/images/feedback.png">
+<p>When we set out to build <a href="https://feedbackmusicapp.com">Feedback</a>, a collaborative music recording app that works entirely in the browser, a key priority for our team was to record, upload and display recorded tracks without causing the browser to refresh. We knew that this would involve making an Ajax call, but none of us had sent anything other than regular old strings of text through forms.</p> 
+
+<p>Fortunately, we discovered that the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Using_FormData_Objects">FormData object </a>can be used to transmit files and not just text strings.  Awesome!</p>
+<p>Here's how accomplished uploading in Feedback:</p>
 
 {% highlight javascript %}
       var fd = new FormData();
@@ -44,4 +48,4 @@ title: Uploading Audio Files Using Form Data & Ajax
  "action"=>"create"}
  {% endhighlight %}
 
- <p>Success!  Rails knows about the audio recorded in the browser.  From here all we need to do is persist the data, and respond with JavaScript telling the browser to append the new audio file to an existing html div. I'll save that for Part 2...</p> 
+ <p>Success!  As you can see from the params, Rails now knows about the audio recorded in the browser.  From here all we need to do is persist the data, and respond with JavaScript telling the browser to append the new audio file to an existing html div. I'll save that for Part 2...</p> 
