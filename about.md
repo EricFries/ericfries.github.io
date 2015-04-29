@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
- I'm a student in the <a href="http://flatironschool.com/web">Web Development Immersive </a>program at the <a href="http://flatironschool.com">Flatiron School.</a>
+ I'm a graduate of the <a href="http://flatironschool.com/web">Web Development Immersive </a>program at the <a href="http://flatironschool.com">Flatiron School.</a>
 
 ### More Information
 
