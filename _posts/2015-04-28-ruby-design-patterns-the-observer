@@ -1,0 +1,14 @@
+---
+layout: post
+title: Ruby Design Patterns, The Observer
+---
+
+<p>One of the things that makes object-oriented programming fun is the ability to have objects send messages to each other.  Sure, it's amusing to make dog and people classes or bank account and transaction classes, but the magic happens when objects of these classes interact.  It is particularly useful for objects to communicate with each other when their state has changed.  If you need a refresher, the concept of "state" is a key principle of object-oriented programming, and <a href="http://en.wikibooks.org/wiki/Ruby_Programming/Overview">it's an object's instance variables hold the state of that object.</a>
+</p>
+
+<p>It turns out that there is a well-developed design pattern called the "observer" that streamlines the exchange of messages between objects.  It works like this: <blockquote>An object, called the subject, maintains a list of its dependents, called observers, and notifies them automatically of any state changes, usually by calling one of their methods. - <a href="https://github.com/nslocum/design-patterns-in-ruby">Nick Slocum</a></blockquote></p>
+
+<p>Let's try to implement the observer design pattern between two objects that exchange messages in the real world, the driver of a car and its gas tank.  This is a really important concept, unless you're trying to see how low the needle can go...</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tDnAzGpxR4k" frameborder="0" allowfullscreen></iframe> 
+

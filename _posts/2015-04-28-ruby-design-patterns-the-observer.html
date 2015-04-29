@@ -1,0 +1,80 @@
+---
+layout: post
+title: Ruby Design Patterns, The Observer
+---
+
+<p>One of the things that makes object-oriented programming fun is the ability to have objects send messages to each other.  Sure, it's amusing to make dog and people classes or bank account and transaction classes, but the magic happens when objects of these classes interact.  It is particularly useful for objects to communicate with each other when their state has changed.  If you need a refresher, the concept of "state" is a key principle of object-oriented programming, and <a href="http://en.wikibooks.org/wiki/Ruby_Programming/Overview">it's an object's instance variables that hold the state of that object.</a>
+</p>
+
+<h2>Observer</h2>
+<p>It turns out that there is a well-developed design pattern called the "observer" that streamlines the exchange of messages between objects.  It works like this: <blockquote>An object, called the subject, maintains a list of its dependents, called observers, and notifies them automatically of any state changes, usually by calling one of their methods. - <a href="https://github.com/nslocum/design-patterns-in-ruby">Nick Slocum</a></blockquote></p>
+
+<p>The observer design pattern is so ubiquitous that there is an <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/observer/rdoc/Observable.html">Observable module</a> in Ruby.  Let's try to implement the observer design pattern (without the module) between two objects that exchange messages in the real world, the driver of a car and its gas tank.  This is a really important concept, unless you're trying to see how low the needle can go...</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tDnAzGpxR4k" frameborder="0" allowfullscreen></iframe> 
+
+<p>A GasTank object will be our subject whose responsibility it is to maintain a list of observers (here it will have one, a Driver). Maintaining a list of observers is not enough, however.  The GasTank must also notify them if there is a change in the GasTank's state.  The specific change in state we want to observe is a change in the GasTank's level. Here's our GasTank class:</p>  
+
+{% highlight ruby %}
+class GasTank
+  attr_accessor :level, :observers
+
+  def initialize
+    @level = "not empty"
+    @observers = []
+  end
+
+  def develop_leak
+    @level = "empty"
+    notify_observers
+  end
+
+  def add_observer(observer)
+    @observers << observer
+  end
+
+  def notify_observers
+    observers.each do |observer|
+      observer.update(self)
+    end
+  end
+end
+{% endhighlight %}
+
+<p>The instance variable :level will hold the state of the GasTank object, i.e., the GasTank is either "empty" or "not empty."  We want to communicate a change in this state to the Driver so let's get the Driver Class set up.</p>
+
+{%highlight ruby%}
+class Driver
+  def update(gastank)
+    if gastank.level == "empty"
+      puts "Time to get gas.  The tank is #{gastank.level}."
+    end
+  end
+end
+{% endhighlight %}
+
+<p>The Driver update method receives an instance of GasTank, and will print a statement to the screen based on the change in the GasTank's state.  Now I'll instantiate an instance of both the GasTank and Driver classes:</p>
+{%highlight bash%}
+ > gastank = GasTank.new
+ => #<GasTank:0x007fee621c6ad0 @level="not empty", @observers=[]> 
+> driver = Driver.new
+ => #<Driver:0x007fee621be218>
+{% endhighlight %}
+
+<p>To get these objects to start communicating, we'll need to invoke the add_observer method on gastank while passing in the driver.</p>
+
+{%highlight bash%}
+> gastank.add_observer(driver)
+ => [#<Driver:0x007fee62194120>]
+ {% endhighlight %}
+
+ <p>This properly pushed the driver object into the gastank's observers array.  Since we now have an observer, we can call the notify_observers method on gastank if there is a change in state.  This method iterates through the observers array, and calls the update method on each object in that array.</p>
+
+ <p>I've conveniently defined a develop_leak method in the GasTank class that will cause a change in state.  When develop_leak is invoked on gastank, the :level instance variable is changed from its default of "not empty" to "empty."  This method also automatically invokes the notify_observers method discussed above.</p>
+{%highlight bash%}
+ > gastank.develop_leak
+Time to get gas.  The tank is empty.
+ => [#<Driver:0x007fee62194120>] 
+  {% endhighlight %}
+
+  <p>And just like that, our objects are talking to each other, and we've implemented a very basic version of the observer design pattern.</p>
