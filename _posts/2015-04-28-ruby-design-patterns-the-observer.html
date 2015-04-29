@@ -2,7 +2,7 @@
 layout: post
 title: Ruby Design Patterns, The Observer
 ---
-
+<img src="http://www.blastr.com/sites/blastr/files/images/Fringe_Observer_binoculars.jpg">
 <p>One of the things that makes object-oriented programming fun is the ability to have objects send messages to each other.  Sure, it's amusing to make dog and people classes or bank account and transaction classes, but the magic happens when objects of these classes interact.  It is particularly useful for objects to communicate with each other when their state has changed.  If you need a refresher, the concept of "state" is a key principle of object-oriented programming, and <a href="http://en.wikibooks.org/wiki/Ruby_Programming/Overview">it's an object's instance variables that hold the state of that object.</a>
 </p>
 
@@ -13,7 +13,7 @@ title: Ruby Design Patterns, The Observer
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/tDnAzGpxR4k" frameborder="0" allowfullscreen></iframe> 
 
-<p>A GasTank object will be our subject whose responsibility it is to maintain a list of observers (here it will have one, a Driver). Maintaining a list of observers is not enough, however.  The GasTank must also notify them if there is a change in the GasTank's state.  The specific change in state we want to observe is a change in the GasTank's level. Here's our GasTank class:</p>  
+<p>A <code>GasTank</code> object will be our subject whose responsibility it is to maintain a list of observers (here it will have one, a <code>Driver</code>). Maintaining a list of observers is not enough, however.  The <code>GasTank</code> must also notify them if there is a change in the <code>GasTank</code>'s state.  The specific change in state we want to observe is a change in the <code>GasTank</code>'s level. Here's our <code>GasTank</code> class:</p>  
 
 {% highlight ruby %}
 class GasTank
@@ -41,7 +41,7 @@ class GasTank
 end
 {% endhighlight %}
 
-<p>The instance variable :level will hold the state of the GasTank object, i.e., the GasTank is either "empty" or "not empty."  We want to communicate a change in this state to the Driver so let's get the Driver Class set up.</p>
+<p>The instance variable <code>@level</code> will hold the state of the <code>GasTank</code> object, i.e., the <code>GasTank</code> is either "empty" or "not empty."  We want to communicate a change in this state to the <code>Driver</code> so let's get the <code>Driver</code> class set up.</p>
 
 {%highlight ruby%}
 class Driver
@@ -53,7 +53,7 @@ class Driver
 end
 {% endhighlight %}
 
-<p>The Driver update method receives an instance of GasTank, and will print a statement to the screen based on the change in the GasTank's state.  Now I'll instantiate an instance of both the GasTank and Driver classes:</p>
+<p>The <code>Driver update</code> method receives an instance of <code>GasTank</code>, and will print a statement to the screen based on the change in the <code>GasTank</code>'s state.  Now I'll instantiate an instance of both the <code>GasTank</code> and <code>Driver</code> classes:</p>
 {%highlight bash%}
  > gastank = GasTank.new
  => #<GasTank:0x007fee621c6ad0 @level="not empty", @observers=[]> 
@@ -61,20 +61,20 @@ end
  => #<Driver:0x007fee621be218>
 {% endhighlight %}
 
-<p>To get these objects to start communicating, we'll need to invoke the add_observer method on gastank while passing in the driver.</p>
+<p>To get these objects to start communicating, we'll need to invoke <code>add_observer</code> on <code>gastank</code> while passing in <code>driver</code>.</p>
 
 {%highlight bash%}
 > gastank.add_observer(driver)
  => [#<Driver:0x007fee62194120>]
  {% endhighlight %}
 
- <p>This properly pushed the driver object into the gastank's observers array.  Since we now have an observer, we can call the notify_observers method on gastank if there is a change in state.  This method iterates through the observers array, and calls the update method on each object in that array.</p>
+ <p>This properly pushed the <code>driver</code> object into the <code>gastank</code>'s <code>observers</code> array.  Since we now have an observer, we can call <code>notify_observers</code> on <code>gastank</code> if there is a change in state.  This method iterates through the <code>observers</code> array, and calls <code>update</code> on each object in that array.</p>
 
- <p>I've conveniently defined a develop_leak method in the GasTank class that will cause a change in state.  When develop_leak is invoked on gastank, the :level instance variable is changed from its default of "not empty" to "empty."  This method also automatically invokes the notify_observers method discussed above.</p>
+ <p>I've conveniently defined the method <code>develop_leak</code> in the <code>GasTank</code> class that will cause a change in state.  When <code>develop_leak</code> is invoked, <code>@level</code> is changed from its default of "not empty" to "empty."  This method also automatically invokes the <code>notify_observers</code> method discussed above.</p>
 {%highlight bash%}
  > gastank.develop_leak
 Time to get gas.  The tank is empty.
  => [#<Driver:0x007fee62194120>] 
   {% endhighlight %}
 
-  <p>And just like that, our objects are talking to each other, and we've implemented a very basic version of the observer design pattern.</p>
+  <p>And just like that, our objects are talking to each other, and we've implemented a basic version of the observer design pattern.</p>
