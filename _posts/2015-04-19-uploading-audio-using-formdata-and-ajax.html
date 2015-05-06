@@ -2,8 +2,10 @@
 layout: post
 title: Uploading Audio Files Using FormData & Ajax
 ---
-<p style="font-style: italic">This is the first in a series of posts about <a href="https://feedbackmusicapp.com">Feedback</a>, a collaborative audio recording app that works entirely in the browser.  Feedback allows musicians to create multi-track audio projects that other members of the Feedback community can add tracks to.  Owners of projects retain the power to "curate" their projects and can keep or delete the tracks added to their project.  Feedback recommends projects to contribute to based on the user's primary musical instrument and the project owner's request to add specific instruments to a project.</p>
+
 <a href="https://feedbackmusicapp.com"><img src="http://ericfries.github.io/images/feedback.png"></a>
+<p style="font-style: italic; font-size: 90%">This is the first in a series of posts about <a href="https://feedbackmusicapp.com">Feedback</a>, a collaborative audio recording app that works entirely in the browser.  Feedback allows musicians to create multi-track audio projects that other members of the Feedback community can add tracks to.  Project owners have the power to "curate" their projects and can keep or delete tracks added by the community.  Feedback recommends projects to contribute to based on the user's primary musical instrument and the project owner's instrument preferences.</p>
+<center><p>***</p></center>
 <p>When we set out to build <a href="https://feedbackmusicapp.com">Feedback</a> a key priority for our team was to record, upload and display recorded tracks without causing the browser to refresh. We knew that this would involve making an Ajax call, but none of us had sent anything other than regular old strings of text through forms.</p> 
 
 <p>Fortunately, we discovered that the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Using_FormData_Objects">FormData object </a>can be used to transmit files and not just text strings.  Awesome!</p>
