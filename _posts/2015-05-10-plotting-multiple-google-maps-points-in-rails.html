@@ -2,65 +2,11 @@
 layout: post
 title: Plotting Multiple Points using the Google Maps API in a Rails App
 ---
+
 <style type="text/css">
 #map-canvas, #map-canvas-multiple-markers { height: 450px; width: 700px; margin: 0; padding: 0;}
 </style>
-<script type="text/javascript"
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7SPc9uf8gF7XhOG_WjWbHkHvRy0cLWaQ">
-</script>
 
-<script>
-function initialize() {
-  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
-  var mapOptions = {
-    zoom: 4,
-    center: myLatlng,
-    mapTypeId: google.maps.MapTypeId.SATELLITE
-  };
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-  var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-  });
-  initializeMultiple(allPoints);
-}
-
-var allPoints = [{latitude: 40.8191951, longitude: -73.957038},{latitude: 40.7491951, longitude: -73.967038}, {latitude: 40.7791951, longitude: -73.907038},];
-
-function initializeMultiple(allPoints) {
-  var myLatlng = new google.maps.LatLng(allPoints[0].latitude,allPoints[0].longitude);
-  var mapOptions = {
-    zoom: 11,
-    center: myLatlng,
-    mapTypeId: google.maps.MapTypeId.SATELLITE
-  };
-  var map = new google.maps.Map(document.getElementById('map-canvas-multiple-markers'), mapOptions);
-
-  dropPins(allPoints, map);
-
-}
-
-function dropPins(allPoints, map){
-  var infowindow = new google.maps.InfoWindow(); 
-  for (var i = 0; i < allPoints.length; i++){
-    var myLatlng = new google.maps.LatLng(allPoints[i].latitude, allPoints[i].longitude);
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map,
-        animation: google.maps.Animation.DROP
-    });
-    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-    return function() {
-    	infowindow.setContent("<ul><li>Latitude " + allPoints[i].latitude + "</li><li>Longitude " + allPoints[i].longitude + "</li></ul>");
-      infowindow.open(map, marker);
-    };
-  })(marker, i));  
-  }
-}
-google.maps.event.addDomListener(window, 'load', initialize);
-
-</script>
 
 <p>The <a href="https://developers.google.com/maps/documentation/javascript/">Google Maps JavaScript API</a> makes plotting a single point on a Google Map really simple.  But what if you need to plot multiple points?<p>
 
@@ -120,4 +66,60 @@ function dropPins(allPoints, map){
 
 <div id="map-canvas-multiple-markers"></div>
 
+<script type="text/javascript"
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7SPc9uf8gF7XhOG_WjWbHkHvRy0cLWaQ">
+</script>
+
+<script>
+function initialize() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var mapOptions = {
+    zoom: 4,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  };
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+  });
+  initializeMultiple(allPoints);
+}
+
+var allPoints = [{latitude: 40.8191951, longitude: -73.957038},{latitude: 40.7491951, longitude: -73.967038}, {latitude: 40.7791951, longitude: -73.907038},];
+
+function initializeMultiple(allPoints) {
+  var myLatlng = new google.maps.LatLng(allPoints[0].latitude,allPoints[0].longitude);
+  var mapOptions = {
+    zoom: 11,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  };
+  var map = new google.maps.Map(document.getElementById('map-canvas-multiple-markers'), mapOptions);
+
+  dropPins(allPoints, map);
+
+}
+
+function dropPins(allPoints, map){
+  var infowindow = new google.maps.InfoWindow(); 
+  for (var i = 0; i < allPoints.length; i++){
+    var myLatlng = new google.maps.LatLng(allPoints[i].latitude, allPoints[i].longitude);
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        animation: google.maps.Animation.DROP
+    });
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    return function() {
+    	infowindow.setContent("<ul><li>Latitude " + allPoints[i].latitude + "</li><li>Longitude " + allPoints[i].longitude + "</li></ul>");
+      infowindow.open(map, marker);
+    };
+  })(marker, i));  
+  }
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
 
