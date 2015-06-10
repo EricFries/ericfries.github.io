@@ -1,0 +1,34 @@
+---
+layout: post
+title: Saving Audio File Attachments with the Paperclip Gem
+---
+
+<a href="https://feedbackmusicapp.com"><img src="http://ericfries.github.io/images/feedback.png"></a>
+<p style="font-style: italic; font-size: 90%">This is the second in a series of posts about <a href="https://feedbackmusicapp.com">Feedback</a>, a collaborative audio recording app that works entirely in the browser.  Feedback allows musicians to create multi-track audio projects that other members of the Feedback community can add tracks to.  Project owners have the power to "curate" their projects and can keep or delete tracks added by the community.  Feedback recommends projects to contribute to based on the user's primary musical instrument and the project owner's instrument preferences.</p>
+<center><p>***</p></center>
+
+<p>The first post about <a href="https://feedbackmusicapp.com">Feedback</a>, discussed uploading audio files to a Rails backend using FormData objects and Ajax calls.  The next step in building Feedback was figuring how to save uploaded files and associate them with our Track model.</p> 
+
+<p>A great Rails gem to assocaite attachments with Model objects is  <a href="https://github.com/thoughtbot/paperclip">Paperclip </a>.  It's frequently used to upload photos, but can be used for other files types like audio.  After adding Paperclip to our gemfile, we needed to update our Track model to associate the actual audio with Track objects.</p>
+
+<p>Here's what we added to our Track model to get Paperclip working:</p>
+
+{% highlight ruby %}
+ has_attached_file :audio
+ validates_attachment_content_type :audio, :content_type => [ 'audio/mpeg', 'audio/x-mpeg', 'audio/mp3', 'audio/x-mp3', 'audio/mpeg3', 'audio/x-mpeg3', 'audio/mpg', 'audio/x-mpg', 'audio/x-mpegaudio' ]
+{% endhighlight %}    
+
+<p>The <code>has_attached_file :audio</code> line of code gives Track objects an <code>audio</code> attribute that maps to the audio file being uploaded.  So <code>track.audio</code> (assuming track is an instance of the Track class) will return a Paperclip::Attachment object.  According to the <a href="http://www.rubydoc.info/gems/paperclip/Paperclip/ClassMethods">Paperclip documentation</a> this object is intended to handle the management of the attached file.  And it does!  So <code>track.audio.url</code> returns the url of where the file is saved.  This means no hard coding urls which is really great.</p>
+
+<p>The <code> validates_attachment_content_type :audio</code> line of code adds an Active Record validation that only allows certain filetypes to be attached.  This ensures that a photo or other non-audio file doesn't accidentatlly (or maliciously) get associated with a Track object. </p>
+
+
+<p>Since the uploaded audio is already hitting the <code>create</code> action in the Tracks controller (as <code>params[:data], the audio can be assigned to a new Track object like any other attribute:</p>
+
+{% highlight ruby %}
+@track = Track.create(audio: mp3_file)
+{% endhighlight %} 
+
+<p>You might be wondering where the audio file is actually be saved since relational databases (we're using Postgres) aren't typically used to store binary data.  Here we've set up Paperclip (in its initialzer file) to store the actual audio with S3 (here's a <a href="https://devcenter.heroku.com/articles/paperclip-s3">good guide</a> from Heroku on how to get that working).  </p>
+
+ <p>Now that audio is being uploaded with Rails using FormData, and persisted to S3 using the Paperclip gem, the next post will explain how we render the audio tracks back to browser so they can be played by the user.</p> 
