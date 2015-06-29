@@ -1,0 +1,41 @@
+---
+layout: post
+title: Merging Audio Files With Ruby and SoX
+---
+
+<p><a href="http://sox.sourceforge.net">SoX</a> is a command line utility for interacting with and manipulating audio files.  For example, it can play audio, add effects to audio, concatenate audio files, and even merge them together.</p>
+
+<p>I was interested in combining multiple audio tracks that together made up a song (e.g., drums, bass, guitar) into one merged audio file. This can be done with SoX in the command line, and can also be implemented programmatically with Ruby.</p>
+
+<h2>Merging Audio with SoX</h2>
+<p> SoX's merge function is called using the <code>-m</code> flag, and requires at least three arguments.  The last argument is always the filename of the merged file to be created, and the first two (or more) arguments are the files to be merged.</p>
+
+<p>After each filename, it is helpful to add the <code>-t</code> flag along with a filetype (e.g., <code>mp3</code>) for files that may be missing headers.  This helps SoX identify and open troublesome files.  Here's what the command line input required to merge <code>file1.mp3</code> and <code>file2.mp3</code> into <code>merged.mp3</code>:</p>
+
+{% highlight bash %}
+sox -m file1.mp3 -t mp3 file2.mp3 -t mp3 merged.mp3
+{% endhighlight %} 
+
+<h2>Integrating SoX with Ruby</h2>
+<p>The Rails application that I needed to merge audio files in was made up in part by a Project model and a Track model.  Each project <code>has_many :tracks</code> and a track <code>belongs_to :project</code>.  In reality, this means that a project will have a variable number of tracks (e.g., drums, vocals, guitar1, guitar2, etc.) so hardcoding a SoX command simply won't work.</p>
+
+<p>The first step in finding a solution for the Rails application was to find a way to use Ruby to run command line operations.  It turns out there is a method (there always is) for this called <code>system</code>.</p>
+
+<p>According to <a href="http://ruby-doc.org/core-2.2.0/Kernel.html#method-i-system">the documentation</a>, the <code>system</code> method is provided by the Kernel module, and can be called without a receiver. <code>system</code> accepts the command you want to run in the form of a string as an argument.  Here's the code I used to accomplish this:</p>
+
+{% highlight ruby %}
+sox_command = "sox -m "
+@project.tracks.each do |track|
+  tempfile = open(track.audio.url)
+  sox_command = sox_command + '-t mp3 ' + tempfile.path + " "
+end
+
+sox_command += "merged_project.mp3"
+
+system sox_command
+{% endhighlight %} 
+
+<p>This code is essentially just building a string that can be called using <code>system</code>.  Note that the audio files being merged were stored on S3 and their respective URLs were stored in the database (accessed by <code>track.audio.url</code>).</p>
+<p>The code works by iterating through the variable number of tracks that belong to a project, opening the tracks as tempfiles (each gets a unique path by default), and concatenating that path plus the file type flag to the <code>sox_command</code> variable which already contained the <code>sox</code> command and the <code>-m</code> flag required to merge the files.</p>
+
+ 
