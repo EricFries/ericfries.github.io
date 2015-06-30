@@ -1,0 +1,72 @@
+---
+layout: post
+title: Generating Dynamic Subway Directions wth Google Directions API
+---
+
+<img src="/images/directions.png"></a>
+<p>The Google Directions API is a powerful tool that can return realtime directions, display them on a map, and even provide alternative routes.</p>  
+
+<p>The application I was building required NYC subway directions, and it needed directions to and from variable points (i.e., different start and end locations).  It was also important to provide a list of step-by-step directions and alternative routes because public transportation in NYC can be unreliable and confusing.  The Google Directions API (combined with the Google Javascript Map API) handled these requirements with ease.</p>
+
+<p>The first step is to create an empty <code>div</code> for both the map itself, and for the list of directions.</p>
+
+{% highlight html %}
+<div id="directions-map"></div>
+<div id="direction-panel"></div>
+{% endhighlight %} 
+
+<p>Then JavaScript is used to fill those <code>divs</code>.  Here's the first section:</p>
+
+{% highlight javascript %}
+
+function getDirections(){
+  $(document).ready(function(){
+
+    var directionsDisplay;
+    var directionsService = new google.maps.DirectionsService();
+    var map;
+
+    function initialize() {
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      var start = new google.maps.LatLng(40.6928, -73.9903);
+      var mapOptions = {
+        zoom: 14,
+        center: start
+      };
+      map = new google.maps.Map(document.getElementById("directions-map"), mapOptions);
+      directionsDisplay.setMap(map);
+      directionsDisplay.setPanel(document.getElementById("direction-panel"));
+    }
+    {% endhighlight %}
+
+    <p>This code declares a few variables and then defines the <code>initialize</code> function.  This function creates a <code>DirectionsRenderer</code> and assigns it to the <code>directionsDisplay</code> variable that is responsible for displaying the directions.  The <code>setMap()</code> function binds the the map created with <code>directionsDisplay</code>, and <code>setPanel()</code> binds the "direction-panel" <code>div</code> with <code>directionsDisplay</code>.  The remaining code is the basic code to render a Google Map using the JavaScript API.</p>  
+
+    <p>Here's the section of code that actually calculates the directions:</p>
+
+    {% highlight javascript %}
+
+    function calcRoute() {
+      var start = $("#start-address").html();
+      var end = $("#end-address").html();
+      var request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode.TRANSIT,
+        provideRouteAlternatives: true
+      };
+
+      directionsService.route(request, function(result, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(result);
+        }
+      });
+    }
+
+		{% endhighlight %} 
+
+		<p>This code assumes that start and end addresses are being generated from the server and displayed on the page with html IDs of "start-address" and "end-address."  The <code>request</code> object's <code>origin</code> and </code> <code>destination</code> properties are set to the <code>start</code> and <code>end</code> addresses.  Different types of directions (e.g., driving or biking) can be requested by modifying the <code>travelMode</code> property.  Here, I wanted subway directions so I've specified "TRANSIT" in that property.  Also, it was important that Google provided alternative routes so I've included the <code>provideRouteAlternatives: true</code> option. </p>
+
+		<p>Finally, the request is made to Google's server using <code>directionsService.route()</code>, by passing in <code>request</code> and a callback function as arguments.  If Google returns on "OK" status, the <code>result</code> is passed into <code>directionsDisplay.setDirections()</code> which renders the results into the map and directions list <code>divs.</code></p>
+
+
+ 
