@@ -8,8 +8,6 @@ permalink: /about/
 
 ### More Information
 
-My dreams are object-oriented.
-
 You can see the projects I'm working on my<a href="http://people.flatironschool.com/profiles/eric-fries"> Flatiron School profile</a> and on <a href="https://github.com/EricFries">GitHub</a>.
 
 
